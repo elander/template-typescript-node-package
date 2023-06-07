@@ -1,0 +1,25 @@
+jobs:
+  post_release:
+    name: Comment on relevant PRs and issues
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "npm_version=$(npm pkg get version)" >> "$GITHUB_ENV"
+      - uses: apexskier/github-release-commenter@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          comment-template: |
+            :tada: This is included in version {release_link} :tada:
+
+            The release is available on:
+
+            * [GitHub releases]({release_link})
+            * [npm package (@latest dist-tag)](https://www.npmjs.com/package/template-typescript-node-package/v/${{ env.npm_version }}})
+
+            Cheers! 📦🚀
+
+name: Post Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: ~
